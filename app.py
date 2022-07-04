@@ -16,12 +16,14 @@ mysql.init_app(app)
 
 @app.route('/')
 def func():
-    sql="INSERT INTO `empleados` (`id`, `nombre`, `correo`, `foto`) VALUES (NULL, 'prueba', 'proeba@prueba', 'foto.jpg');"
+    sql="SELECT * FROM `EMPLEADOS`;"
     conn=mysql.connect() #abrir conexion con objeto sql
     cursor=conn.cursor() #llevar la sentencia sql (line 17) y llevarla a la DB
     cursor.execute(sql) #ejecutar la consulta line17
+    empleados = cursor.fetchall()
+    print(empleados)
     conn.commit() #mandar la consulta
-    return render_template('empleados/index.html')
+    return render_template('empleados/index.html' , empleados = empleados)
 
 @app.route('/create') #enrutar al html
 def create():
@@ -34,9 +36,16 @@ def storage():
     _correo = request.form['txtCorreo']
     _foto = request.files['txtFoto']
     
+    now = datetime.now()
+    tiempo = now.strftime("%Y%H%M%S")
+    
+    if _foto.filename != '':
+        nuevoNombreFoto= tiempo + _foto.filename
+        _foto.save("uploads/"+nuevoNombreFoto)
+    
     sql = "INSERT INTO `empleados` (`id`, `nombre`, `correo`, `foto`) VALUES (NULL, %s, %s, %s);"
     
-    datos = (_nombre, _correo, _foto.filename)
+    datos = (_nombre, _correo, nuevoNombreFoto)
     conn=mysql.connect() #abrir conexion con objeto sql
     cursor=conn.cursor() #llevar la sentencia sql (line 17) y llevarla a la DB
     cursor.execute(sql,datos) #ejecutar la consulta line17
