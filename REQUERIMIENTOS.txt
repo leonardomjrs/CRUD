@@ -1,0 +1,15 @@
+XAMP
+VSCODE
+	>BOOTSTRAP V4 SNIPPETS > ZACZERO
+	>FLASK-SNIPPETS > CSTRAP
+	>FLASK SNIPPETS > CODE YARD
+	>JINJA2 SNIPPET KIT  > WYATT FERGUS
+	>PALENIGHT (OPT)
+	>ANDROMEDA (OPT)
+	>Terminal VSCODE
+		>pip install flask
+		>pip install Flask-MySQL
+		>pip install jinja2
+
+*********problema de reconocimiento VSCODE CTRL + k (sueltas) M > seleccionar lenguaje
+

@@ -1,7 +1,9 @@
-from distutils.log import debug
+from turtle import update
 from flask import Flask
-from flask import render_template
+from flask import render_template , request , redirect
 from flaskext.mysql import MySQL
+from datetime import datetime
+import os
 
 app= Flask(__name__)
 
@@ -15,14 +17,31 @@ mysql.init_app(app)
 @app.route('/')
 def func():
     sql="INSERT INTO `empleados` (`id`, `nombre`, `correo`, `foto`) VALUES (NULL, 'prueba', 'proeba@prueba', 'foto.jpg');"
-    conn=mysql.connect()
-    cursor=conn.cursor()
-    cursor.execute(sql)
-    conn.commit()
+    conn=mysql.connect() #abrir conexion con objeto sql
+    cursor=conn.cursor() #llevar la sentencia sql (line 17) y llevarla a la DB
+    cursor.execute(sql) #ejecutar la consulta line17
+    conn.commit() #mandar la consulta
     return render_template('empleados/index.html')
 
+@app.route('/create') #enrutar al html
+def create():
+    return render_template('empleados/create.html')
 
 
+@app.route("/store", methods=['POST']) #traer datos de create.html
+def storage():
+    _nombre = request.form['txtNombre']
+    _correo = request.form['txtCorreo']
+    _foto = request.files['txtFoto']
+    
+    sql = "INSERT INTO `empleados` (`id`, `nombre`, `correo`, `foto`) VALUES (NULL, %s, %s, %s);"
+    
+    datos = (_nombre, _correo, _foto.filename)
+    conn=mysql.connect() #abrir conexion con objeto sql
+    cursor=conn.cursor() #llevar la sentencia sql (line 17) y llevarla a la DB
+    cursor.execute(sql,datos) #ejecutar la consulta line17
+    conn.commit() #mandar la consulta
+    return render_template('empleados/index.html')
 
 
 
