@@ -25,6 +25,15 @@ def func():
     conn.commit() #mandar la consulta
     return render_template('empleados/index.html' , empleados = empleados)
 
+@app.route("/destroy/<int:id>")
+def destroy(id):
+    conn=mysql.connect()
+    cursor=conn.cursor()
+    cursor.execute("DELETE FROM empleados WHERE id=%s", id)
+    conn.commit()
+    return redirect('/')
+    
+    
 @app.route('/create') #enrutar al html
 def create():
     return render_template('empleados/create.html')
